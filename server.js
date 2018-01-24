@@ -5,23 +5,23 @@ const PORT = process.env.PORT || 3000;
 const convert = require('convert-units');
 
 const conversions = {
-  minute: {unit_name: 's', multiplication_factor: convert(1).from('min').to('s').toFixed(14)},
-  min: {unit_name: 's', multiplication_factor: convert(1).from('min').to('s').toFixed(14)},
-  hour: {unit_name: 's', multiplication_factor: convert(1).from('h').to('s').toFixed(14)},
-  h: {unit_name: 's', multiplication_factor: convert(1).from('h').to('s').toFixed(14)},
-  day: {unit_name: 's', multiplication_factor: convert(1).from('d').to('s').toFixed(14)},
-  d: {unit_name: 's', multiplication_factor: convert(1).from('d').to('s').toFixed(14)},
-  degree: {unit_name: 'rad', multiplication_factor: (Math.PI / 180).toFixed(14)},
-  '°': {unit_name: 'rad', multiplication_factor: (Math.PI / 180).toFixed(14)},
-  "'": {unit_name: 'rad', multiplication_factor: (Math.PI / 10800).toFixed(14)},
-  second: {unit_name: 'rad', multiplication_factor: (Math.PI / 648000).toFixed(14)},
-  '"': {unit_name: 'rad', multiplication_factor: (Math.PI / 648000).toFixed(14)},
-  hectare: {unit_name: 'm2', multiplication_factor: convert(1).from('ha').to('m2').toFixed(14)},
-  ha: {unit_name: 'm2', multiplication_factor: convert(1).from('ha').to('m2').toFixed(14)},
-  litre: {unit_name: 'm3', multiplication_factor: convert(1).from('l').to('m3').toFixed(14)},
-  L: {unit_name: 'm3', multiplication_factor: convert(1).from('l').to('m3').toFixed(14)},
-  tonne: {unit_name: 'kg', multiplication_factor: convert(1).from('t').to('kg').toFixed(14)},
-  t: {unit_name: 'kg', multiplication_factor: convert(1).from('t').to('kg').toFixed(14)},
+  minute: {unit_name: 's', multiplication_factor: parseFloat(convert(1).from('min').to('s').toFixed(14))},
+  min: {unit_name: 's', multiplication_factor: parseFloat(convert(1).from('min').to('s').toFixed(14))},
+  hour: {unit_name: 's', multiplication_factor: parseFloat(convert(1).from('h').to('s').toFixed(14))},
+  h: {unit_name: 's', multiplication_factor: parseFloat(convert(1).from('h').to('s').toFixed(14))},
+  day: {unit_name: 's', multiplication_factor: parseFloat(convert(1).from('d').to('s').toFixed(14))},
+  d: {unit_name: 's', multiplication_factor: parseFloat(convert(1).from('d').to('s').toFixed(14))},
+  degree: {unit_name: 'rad', multiplication_factor: parseFloat((Math.PI / 180).toFixed(14))},
+  '°': {unit_name: 'rad', multiplication_factor: parseFloat((Math.PI / 180).toFixed(14))},
+  "'": {unit_name: 'rad', multiplication_factor: parseFloat((Math.PI / 10800).toFixed(14))},
+  second: {unit_name: 'rad', multiplication_factor: parseFloat((Math.PI / 648000).toFixed(14))},
+  '"': {unit_name: 'rad', multiplication_factor: parseFloat((Math.PI / 648000).toFixed(14))},
+  hectare: {unit_name: 'm2', multiplication_factor: parseFloat(convert(1).from('ha').to('m2').toFixed(14))},
+  ha: {unit_name: 'm2', multiplication_factor: parseFloat(convert(1).from('ha').to('m2').toFixed(14))},
+  litre: {unit_name: 'm3', multiplication_factor: parseFloat(convert(1).from('l').to('m3').toFixed(14))},
+  L: {unit_name: 'm3', multiplication_factor: parseFloat(convert(1).from('l').to('m3').toFixed(14))},
+  tonne: {unit_name: 'kg', multiplication_factor: parseFloat(convert(1).from('t').to('kg').toFixed(14))},
+  t: {unit_name: 'kg', multiplication_factor: parseFloat(convert(1).from('t').to('kg').toFixed(14))},
 }
 
 app.use(bodyParser.json());
@@ -34,22 +34,22 @@ app.get('/units/si', (req, res) => {
   if (unit) {
     if (unit.includes('/') || unit.includes('*') || unit.includes('(')) {
       evaluate(unit, (unitName, data) => {
-        res.status(200).json({unit_name: unitName, multiplication_factor: data});
+        res.status(200).json({unit_name: unitName, multiplication_factor: parseFloat(data.toFixed(14))});
       });
     } else if (unit && conversions[unit]) {
       res.status(200).json(conversions[unit]);
     } else {
-      res.status(404).json(['Not a valid search parameter value. Try one of these below:'].concat(Object.keys(conversions)));
+      res.status(404).json(['Invalid search parameter value. Try one of these below:'].concat(Object.keys(conversions)));
     }
   } else if (req.query.hasOwnProperty('units')) {
-    res.status(404).json('Missing search parameter value. Input -> minute');
+    res.status(404).json(['Missing search parameter value. (e.g. units=min) Try one of these below:'].concat(Object.keys(conversions)));
   } else {
-    res.status(400).json('Not a valid search parameter key. Input -> units');
+    res.status(400).json('Invalid search parameter key. Please input -> units (e.g  /units/si?units)');
   }
 });
 
 app.get('/', (req, res) => {
-  res.json('Welcome! To get started converting, try inputing an endpoint like: /units/si?units=minute');
+  res.json('Welcome! To get started converting, use an endpoint like: /units/si?units=minute');
 });
 
 app.listen(PORT, () => console.log(`App is listening on port ${PORT}`));
