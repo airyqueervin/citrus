@@ -1,0 +1,25 @@
+{
+  "name": "citrus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/airyqueervin/citrus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/airyqueervin/citrus/issues"
+  },
+  "homepage": "https://github.com/airyqueervin/citrus#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "convert-units": "^2.3.4",
+    "express": "^4.16.2"
+  }
+}
