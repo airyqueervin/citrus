@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/units/si', (req, res) => {
   const unit = req.query.units;
-  console.log(req.query)
+  
   if (unit) {
     if (unit.includes('/') || unit.includes('*') || unit.includes('(')) {
       evaluate(unit, (unitName, data) => {
@@ -83,7 +83,7 @@ function evaluate(expression, callback) {
       if (tokens[nextIndex]) {
         unitConvert += tokens[nextIndex];
       }
-      console.log('UNIT', unitConvert)
+      
       i = nextIndex-1;
       values.push(conversions[resStr].multiplication_factor)
     // Current token is an opening brace, push it to 'ops'
